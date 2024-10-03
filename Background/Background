@@ -1,0 +1,6 @@
+## Background for Lead IQ Data
+
+Exposure to low lead levels can lead to damage to the nervous system. For this project, CDC investigators examined the relationship between low-level lead absorption and neurological function. The CDC team gathered data from children between the ages of 3 and 15 residing in El Paso, Texas. The children lived near a lead-emitting ore smelter. The lead_iq_01.csv contains part of the data the CDC team gathered.
+
+The data has 124 observations and 2 variables.
+The variables consist of Smelter:  Did the subject live within 1 mile of the lead smelter? (Near, Far) and IQ: The subject’s IQ score, as measured by the Wechsler Intelligence Scale for Children (WISC).
