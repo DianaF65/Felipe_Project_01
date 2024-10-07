@@ -24,6 +24,12 @@ opts_chunk$set(tidy = FALSE)
 # read in data
 library(readr)
 lead_iq <- read.csv("../DataRaw/lead-iq-01.csv")
+
+# new lead_iq without IQ 999:
+# remove 999 value - 10th row
+lead_iq2 <- lead_iq[-10, ]
+
+lead_iq <- lead_iq2
 ```
 
 
@@ -34,7 +40,8 @@ Produce a graph showing IQ levels by location status (with outlier)
 library(ggplot2)
 ggplot(lead_iq, aes(x = Smelter, y = IQ, fill = Smelter)) + 
   geom_boxplot()  +
-  scale_y_continuous(breaks = seq(0, max(lead_iq$IQ) + 30, by = 100))
+  scale_y_continuous(breaks = seq(0, max(lead_iq$IQ) + 30, 
+                                  by =  ceiling(max(lead_iq$IQ)/ 10 )))
 ```
 \newpage
 
@@ -61,15 +68,15 @@ describeBy(lead_iq, group=lead_iq$Smelter, fast = TRUE)
 ## Part c
 A couple sentences of text (not on the graph, but in the body of the Rmarkdown document) describing the graph and the table\newline
 
-From the boxplot, we can noticeably see an outlier at around 1000. With this plot, it is difficult to compare those who lived far or near to the Smelter. However, we can see that they appear to have a similar range of IQ's. 
-Once adjusting the y limits in the plot to exclude the outlier, we are more easily able to see that those who live further away from the smelter seem to generally have a higher IQ. The mean of the Far group is higher and the range is slightly higher than than of the near group. We also see some noticeable outliers in the Far group. Overall, with the boxplots there appears to be a slight difference in the range of IQ of those who live near to the smelter compared to those who live further away. \newline
-From our table, we can see that the Far group's mean IQ is 106.12 with an SD of 111.88 and median of 93. We also have a max of 999 which obviously effects these summary stats. For the near group, we have that the mean is 89.19, sd is 12.17, and median is 88. With the outlier, it is a bit challenging to tell how different the groups vary in IQ through the histogram and table.  \newline
+From the boxplot, we can see that the Far group appears to generally have higher IQ's than that of the Near group. The mean of the Far group is visibly higher than that of the Near group. We can also see that both groups have a similar spread, around 10 or so for both groups. A noticeable difference between the two is that the Far group has quit a few significant outliers, both below and above. The near group does not have any outliers. Overall, we can see that there does appear to be an association between distance from the smelter and IQ.  \newline
+From our table, we can see that the Far group's mean IQ is 92.59 with an SD of 16.08 and median of 93. We also have a max of 141.
+For the near group, we have that the mean is 89.19, sd is 12.17, and median is 88. From the table values, we arrive at the same conclusion as with the boxplots. Students that live further from the smelter seem to generally have a higher IQ compared to those that live closer to the smelter.  \newline
 
 ## Part d
 In-line calculations giving the values of the means, that will be updated if the data are changed\newline
 ```{r , tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-mean_func <- function(x) paste(c(round(mean(x[x$Smelter == "Far", 2]), 4) ,
-                                 round(mean(x[x$Smelter == "Near", 2]), 4)),
+mean_func <- function(x) paste(c(round(mean(x[x$Smelter == "Far", 2]), 2) ,
+                                 round(mean(x[x$Smelter == "Near", 2]), 2)),
                                collapse = " and ")
 ```
 
