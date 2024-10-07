@@ -1,0 +1,79 @@
+---
+title: "Project_01"
+author: "Diana Felipe"
+header-includes:
+   - \usepackage{bbm}
+   - \usepackage{array}
+   - \usepackage{multirow}
+   - \usepackage{amsmath}
+output: pdf_document
+date: "2024-10-03"
+---
+
+```{r, include=F}
+
+# Project: BIOS 6621 Projec 1
+# Author: Diana Felipe
+
+library(knitr)
+library(ggplot2)
+opts_chunk$set(tidy = FALSE)
+```
+
+```{r}
+# read in data
+library(readr)
+lead_iq <- read.csv("../DataRaw/lead-iq-01.csv")
+```
+
+
+## Part a
+Produce a graph showing IQ levels by location status (with outlier)
+```{r}
+# graph showing IQ levels by location status
+library(ggplot2)
+ggplot(lead_iq, aes(x = Smelter, y = IQ, fill = Smelter)) + 
+  geom_boxplot()  +
+  scale_y_continuous(breaks = seq(0, max(lead_iq$IQ) + 30, by = 100))
+```
+\newpage
+
+## Part b
+Produce a nicely formatted table
+
+```{r}
+# table with kable function 
+d1 <- head(lead_iq[lead_iq$Smelter == "Near", ])
+d2 <- head(lead_iq[lead_iq$Smelter == "Far", ])
+knitr::kable(
+  list(d1, d2),
+  caption = 'Tables of Smelter (Near and Far) and IQ',
+  valign = 't')
+```
+```{r}
+# second table for summary stats
+library(psych)
+
+describeBy(lead_iq, group=lead_iq$Smelter, fast = TRUE)
+
+```
+\newpage
+## Part c
+A couple sentences of text (not on the graph, but in the body of the Rmarkdown document) describing the graph and the table\newline
+
+From the boxplot, we can noticeably see an outlier at around 1000. With this plot, it is difficult to compare those who lived far or near to the Smelter. However, we can see that they appear to have a similar range of IQ's. 
+Once adjusting the y limits in the plot to exclude the outlier, we are more easily able to see that those who live further away from the smelter seem to generally have a higher IQ. The mean of the Far group is higher and the range is slightly higher than than of the near group. We also see some noticeable outliers in the Far group. Overall, with the boxplots there appears to be a slight difference in the range of IQ of those who live near to the smelter compared to those who live further away. \newline
+From our table, we can see that the Far group's mean IQ is 106.12 with an SD of 111.88 and median of 93. We also have a max of 999 which obviously effects these summary stats. For the near group, we have that the mean is 89.19, sd is 12.17, and median is 88. With the outlier, it is a bit challenging to tell how different the groups vary in IQ through the histogram and table.  \newline
+
+## Part d
+In-line calculations giving the values of the means, that will be updated if the data are changed\newline
+```{r , tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+mean_func <- function(x) paste(c(round(mean(x[x$Smelter == "Far", 2]), 4) ,
+                                 round(mean(x[x$Smelter == "Near", 2]), 4)),
+                               collapse = " and ")
+```
+
+The mean IQ of the Far and Near groups, respectively, are 
+`r mean_func(lead_iq)`.\newline
+
+
